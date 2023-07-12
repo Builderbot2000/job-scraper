@@ -1,19 +1,20 @@
 import axios from "axios";
-import axiosRetry from "axios-retry";
+import { setTimeout } from "timers/promises";
 
 import { Params } from "../types/params";
 import { Posting } from "../types/posting";
 import { indexQueryAddress } from "../utils/linkedinApi";
 import cheerio from "cheerio";
+import { postingFilter } from "../utils/postingFilter";
 
-axiosRetry(axios, {
-  retries: 3,
-  retryDelay: (retryCount) => {
-    return retryCount * 1000;
-  },
-});
+const wait = async (duration: number) => {
+  await setTimeout(duration);
+};
 
-const queryJob = async (queryString: string): Promise<Posting | null> => {
+const queryJob = async (
+  params: Params,
+  queryString: string
+): Promise<Posting | null> => {
   try {
     const response = await axios.get(queryString);
     const jobPostingHtml = response.data as string;
@@ -67,11 +68,13 @@ const queryJob = async (queryString: string): Promise<Posting | null> => {
       jobFunction: postingCriteriasList[2],
       industries: postingCriteriasList[3],
     };
+    if (postingFilter(params, postingInfo) == false) return null;
     return postingInfo;
   } catch (err) {
     // if (err && err instanceof Error) console.log(err.message);
+    await wait(3000);
     console.log("RETRY");
-    const postingInfo = await queryJob(queryString);
+    const postingInfo = await queryJob(params, queryString);
     return postingInfo;
   }
 };
@@ -90,7 +93,7 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
   });
   const postings: Array<Posting> = [];
   for (const link of jobLinks) {
-    const posting = await queryJob(link);
+    const posting = await queryJob(params, link);
     // console.log(posting);
     if (posting) {
       postings.push(posting);

@@ -16,4 +16,7 @@ export interface Params {
   salary: string;
   jobType: string;
   experienceLevel: string;
+  include: string[];
+  exclude: string[];
+  applied: string[];
 }

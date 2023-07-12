@@ -10,5 +10,8 @@ Content-Type: application/json
     "company": null,
     "salary": null,
     "jobType": "Full-time",
-    "experienceLevel": "Entry level"
+    "experienceLevel": "Entry level",
+    "include": [],
+    "exclude": ["years of professional experience"],
+    "applied": ["Code Particle Inc"]
 }

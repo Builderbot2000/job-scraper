@@ -11,6 +11,20 @@ const parseString = (string: unknown): string => {
   return string.replace(" ", "%20");
 };
 
+const parseStringArray = (stringArray: unknown): Array<string> => {
+  if (!stringArray || !(stringArray instanceof Array)) {
+    throw new Error("Incorrect or missing string array");
+  }
+  const outputArray: Array<string> = [];
+  for (const stringElement of stringArray) {
+    if (!stringElement || !isString(stringElement)) {
+      throw new Error("Incorrect or missing string array element");
+    }
+    outputArray.push(stringElement);
+  }
+  return outputArray;
+};
+
 const isObject = (object: unknown): object is object => {
   return typeof object === "object" || object instanceof Object;
 };
@@ -28,7 +42,10 @@ const parseParams = (requestObject: unknown): Params => {
     "company" in requestObject &&
     "salary" in requestObject &&
     "jobType" in requestObject &&
-    "experienceLevel" in requestObject
+    "experienceLevel" in requestObject &&
+    "include" in requestObject &&
+    "exclude" in requestObject &&
+    "applied" in requestObject
   ) {
     const newParamsObject: Params = {
       keyword: parseString(requestObject.keyword),
@@ -48,6 +65,15 @@ const parseParams = (requestObject: unknown): Params => {
       experienceLevel: requestObject.experienceLevel
         ? parseString(requestObject.experienceLevel)
         : "",
+      include: requestObject.include
+        ? parseStringArray(requestObject.include)
+        : [],
+      exclude: requestObject.exclude
+        ? parseStringArray(requestObject.exclude)
+        : [],
+      applied: requestObject.applied
+        ? parseStringArray(requestObject.applied)
+        : [],
     };
     return newParamsObject;
   }
