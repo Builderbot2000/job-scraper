@@ -1,0 +1,14 @@
+POST http://localhost:3001/api/linkedinJobs
+Content-Type: application/json
+
+{
+    "keyword": "Web Developer",
+    "location": "Surrey, British Columbia, Canada",
+    "postedTime": "Any time",
+    "distance": null,
+    "commute": "Remote, Hybrid",
+    "company": null,
+    "salary": null,
+    "jobType": "Full-time",
+    "experienceLevel": "Entry level"
+}
