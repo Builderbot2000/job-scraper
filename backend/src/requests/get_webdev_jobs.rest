@@ -13,5 +13,8 @@ Content-Type: application/json
     "experienceLevel": "Entry level",
     "include": [],
     "exclude": ["years of professional experience"],
-    "applied": ["Code Particle Inc"]
+    "applied": ["Code Particle Inc"],
+    "strongInclude": ["Javascript"],
+    "position": 10,
+    "length": 3
 }

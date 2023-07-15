@@ -1,11 +1,3 @@
-export enum CommuteType {
-  onsite = "On-site",
-  hybrid = "Hybrid",
-  remote = "Remote",
-}
-
-export type CommuteTypes = Array<CommuteType>;
-
 export interface Params {
   keyword: string;
   location: string;
@@ -19,4 +11,7 @@ export interface Params {
   include: string[];
   exclude: string[];
   applied: string[];
+  strongInclude: string[];
+  position: number;
+  length: number;
 }

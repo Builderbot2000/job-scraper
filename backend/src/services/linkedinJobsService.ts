@@ -92,13 +92,20 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
     if (jobLink) jobLinks.push(jobLink);
   });
   const postings: Array<Posting> = [];
+  console.log(jobLinks);
+  let currentPosition = 0;
+  let currentLength = 0;
   for (const link of jobLinks) {
-    const posting = await queryJob(params, link);
-    // console.log(posting);
-    if (posting) {
-      postings.push(posting);
-      console.log("SUCCESS");
-    } else console.log("FAIL");
+    if (currentLength >= params.length) break;
+    if (currentPosition >= params.position) {
+      const posting = await queryJob(params, link);
+      // console.log(posting);
+      if (posting) {
+        postings.push(posting);
+        currentLength += 1;
+        console.log("SUCCESS");
+      } else console.log("FAIL");
+    } else currentPosition += 1;
   }
   return postings;
 };

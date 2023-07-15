@@ -25,6 +25,17 @@ const parseStringArray = (stringArray: unknown): Array<string> => {
   return outputArray;
 };
 
+const isNumber = (text: unknown): text is number => {
+  return typeof text === "number" || text instanceof Number;
+};
+
+const parseNumber = (number: unknown): number => {
+  if (!number || !isNumber(number)) {
+    throw new Error("Incorrect or missing number");
+  }
+  return number;
+};
+
 const isObject = (object: unknown): object is object => {
   return typeof object === "object" || object instanceof Object;
 };
@@ -45,7 +56,10 @@ const parseParams = (requestObject: unknown): Params => {
     "experienceLevel" in requestObject &&
     "include" in requestObject &&
     "exclude" in requestObject &&
-    "applied" in requestObject
+    "applied" in requestObject &&
+    "strongInclude" in requestObject &&
+    "position" in requestObject &&
+    "length" in requestObject
   ) {
     const newParamsObject: Params = {
       keyword: parseString(requestObject.keyword),
@@ -74,6 +88,13 @@ const parseParams = (requestObject: unknown): Params => {
       applied: requestObject.applied
         ? parseStringArray(requestObject.applied)
         : [],
+      strongInclude: requestObject.strongInclude
+        ? parseStringArray(requestObject.strongInclude)
+        : [],
+      position: requestObject.position
+        ? parseNumber(requestObject.position)
+        : 0,
+      length: requestObject.length ? parseNumber(requestObject.length) : 10,
     };
     return newParamsObject;
   }
