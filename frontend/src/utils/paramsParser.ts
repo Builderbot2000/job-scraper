@@ -1,14 +1,10 @@
 import { Params } from "../types/params";
+import { isNumber, isObject, isString } from "./typeGuards";
 
-const isString = (text: unknown): text is string => {
-  return typeof text === "string" || text instanceof String;
-};
-
-const parseString = (string: unknown): string => {
-  if (!string || !isString(string)) {
-    throw new Error("Incorrect or missing string");
-  }
-  return string.replace(" ", "%20");
+export const parseString = (string: unknown): string => {
+  if (!string) return "";
+  if (!isString(string)) throw new Error("Incorrect string");
+  return string;
 };
 
 const parseStringArray = (stringArray: unknown): Array<string> => {
@@ -25,19 +21,11 @@ const parseStringArray = (stringArray: unknown): Array<string> => {
   return outputArray;
 };
 
-const isNumber = (text: unknown): text is number => {
-  return typeof text === "number" || text instanceof Number;
-};
-
 const parseNumber = (number: unknown): number => {
   if (!number || !isNumber(number)) {
     throw new Error("Incorrect or missing number");
   }
   return number;
-};
-
-const isObject = (object: unknown): object is object => {
-  return typeof object === "object" || object instanceof Object;
 };
 
 const parseParams = (requestObject: unknown): Params => {

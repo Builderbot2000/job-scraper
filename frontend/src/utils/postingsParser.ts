@@ -1,19 +1,12 @@
 import { Posting } from "../types/posting";
-
-const isString = (text: unknown): text is string => {
-  return typeof text === "string" || text instanceof String;
-};
-
-const isObject = (object: unknown): object is object => {
-  return typeof object === "object" || object instanceof Object;
-};
+import { isObject, isString } from "./typeGuards";
 
 const parseString = (string: unknown): string => {
   if (!string) return "";
   if (!isString(string)) {
     throw new Error("Incorrect string");
   }
-  return string.replace(" ", "%20");
+  return string;
 };
 
 const parsePostings = (responseArray: unknown): Array<Posting> => {
@@ -33,7 +26,8 @@ const parsePostings = (responseArray: unknown): Array<Posting> => {
       "seniority" in responseObject &&
       "jobType" in responseObject &&
       "jobFunction" in responseObject &&
-      "industries" in responseObject
+      "industries" in responseObject &&
+      "link" in responseObject
     ) {
       const parsedPostingObject: Posting = {
         title: parseString(responseObject.title),
@@ -46,9 +40,13 @@ const parsePostings = (responseArray: unknown): Array<Posting> => {
         jobType: parseString(responseObject.jobType),
         jobFunction: parseString(responseObject.jobFunction),
         industries: parseString(responseObject.industries),
+        link: parseString(responseObject.link),
       };
       parsedPostingsArray.push(parsedPostingObject);
-    } else throw new Error("Incorrect data: data fields are missing");
+    } else {
+      console.log("Bad response object: ", responseObject);
+      throw new Error("Incorrect data: data fields are missing");
+    }
   }
   return parsedPostingsArray;
 };

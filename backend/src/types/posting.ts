@@ -9,4 +9,5 @@ export interface Posting {
   jobType: string;
   jobFunction: string;
   industries: string;
+  link: string;
 }

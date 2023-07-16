@@ -6,62 +6,153 @@ import {
   Grid,
   Input,
   InputLabel,
+  TextField,
+  Typography,
 } from "@mui/material";
 
+import { useAppDispatch, usePersistentField } from "../hooks";
+import { Params } from "../types/params";
+import { saveParams } from "../reducers/paramsReducer";
+import { initializePostingsByParams } from "../reducers/postingsReducer";
+
 const QueryForm = () => {
+  const keyword = usePersistentField("keyword");
+  const location = usePersistentField("location");
+  const company = usePersistentField("company");
+  const include = usePersistentField("include");
+  const exclude = usePersistentField("exclude");
+
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    const newParams: Params = {
+      keyword: keyword.value,
+      location: location.value,
+      postedTime: "Anytime",
+      distance: "",
+      commute: "",
+      company: company.value,
+      salary: "",
+      jobType: "",
+      experienceLevel: "",
+      include: include.value === "" ? [] : include.value.split(", "),
+      exclude: exclude.value === "" ? [] : exclude.value.split(", "),
+      applied: [],
+      strongInclude: [],
+      position: 0,
+      length: 10,
+    };
+    // console.log(newParams);
+    dispatch(saveParams(newParams));
+    dispatch(initializePostingsByParams(newParams));
+  };
+
+  const handleClear = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    keyword.clear();
+    location.clear();
+    company.clear();
+    include.clear();
+    exclude.clear();
+  };
+
   return (
     <>
-      <FormLabel sx={{ m: 3 }}>
-        <h1>Search for jobs</h1>
+      <FormLabel>
+        <Typography
+          variant="h4"
+          noWrap
+          sx={{
+            ml: 3,
+            mr: 2,
+            display: { xs: "none", md: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          SEARCH FOR JOBS
+        </Typography>
       </FormLabel>
-      <Grid container xs={12}>
+      <Grid container sx={{ mt: 3 }}>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>search term</InputLabel>
-            <Input />
+            <Input value={keyword.value} onChange={keyword.onChange} />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>location</InputLabel>
-            <Input />
+            <Input value={location.value} onChange={location.onChange} />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>company</InputLabel>
-            <Input />
+            <Input value={company.value} onChange={company.onChange} />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
-            <InputLabel>applied</InputLabel>
-            <Input />
+            <InputLabel>must include</InputLabel>
+            <Input disabled />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>include</InputLabel>
-            <Input />
-          </FormControl>
+          <TextField
+            id="include-input"
+            label="include"
+            variant="outlined"
+            multiline
+            minRows={4}
+            sx={{ mt: 3 }}
+            value={include.value}
+            onChange={include.onChange}
+          />
         </Grid>
         <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>exclude</InputLabel>
-            <Input />
-          </FormControl>
+          <TextField
+            id="exclude-input"
+            label="exclude"
+            variant="outlined"
+            multiline
+            minRows={4}
+            sx={{ mt: 3 }}
+            value={exclude.value}
+            onChange={exclude.onChange}
+          />
         </Grid>
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="left" alignItems="center">
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 7, width: 150, height: 50 }}
-              size="large"
-            >
-              Search
-            </Button>
-          </Box>
+        <Grid container>
+          <Grid item xs={3}>
+            <Box display="flex" justifyContent="left" alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 7, width: 150, height: 50 }}
+                size="large"
+                onClick={handleSubmit}
+              >
+                Search
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={3}>
+            <Box display="flex" justifyContent="left" alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 7, width: 150, height: 50 }}
+                size="large"
+                onClick={handleClear}
+              >
+                Clear
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
     </>

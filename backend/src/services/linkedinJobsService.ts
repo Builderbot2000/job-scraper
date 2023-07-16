@@ -63,10 +63,11 @@ const queryJob = async (
       postedTime: postedTime,
       competition: competition,
       description: description,
-      seniority: postingCriteriasList[0],
-      jobType: postingCriteriasList[1],
-      jobFunction: postingCriteriasList[2],
-      industries: postingCriteriasList[3],
+      seniority: postingCriteriasList[0] ? postingCriteriasList[0] : "N/A",
+      jobType: postingCriteriasList[1] ? postingCriteriasList[1] : "N/A",
+      jobFunction: postingCriteriasList[2] ? postingCriteriasList[2] : "N/A",
+      industries: postingCriteriasList[3] ? postingCriteriasList[3] : "N/A",
+      link: queryString,
     };
     if (postingFilter(params, postingInfo) == false) return null;
     return postingInfo;
@@ -92,7 +93,6 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
     if (jobLink) jobLinks.push(jobLink);
   });
   const postings: Array<Posting> = [];
-  console.log(jobLinks);
   let currentPosition = 0;
   let currentLength = 0;
   for (const link of jobLinks) {
