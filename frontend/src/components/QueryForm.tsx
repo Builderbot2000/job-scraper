@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -12,8 +13,14 @@ import {
 
 import { useAppDispatch, usePersistentField } from "../hooks";
 import { Params } from "../types/params";
-import { saveParams } from "../reducers/paramsReducer";
-import { initializePostingsByParams } from "../reducers/postingsReducer";
+import { clearParams, saveParams } from "../reducers/paramsReducer";
+import {
+  clearPostings,
+  initializePostingsByParams,
+} from "../reducers/postingsReducer";
+import { setRequests } from "../reducers/requestsReducer";
+import { isObject, isNumber } from "../utils/typeGuards";
+import postings from "../services/postings";
 
 const QueryForm = () => {
   const keyword = usePersistentField("keyword");
@@ -23,6 +30,18 @@ const QueryForm = () => {
   const exclude = usePersistentField("exclude");
 
   const dispatch = useAppDispatch();
+
+  const runningRequests: number = useSelector((state) => {
+    if (
+      state &&
+      isObject(state) &&
+      "requests" in state &&
+      state.requests &&
+      isNumber(state.requests)
+    ) {
+      return state.requests;
+    } else return 0;
+  });
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -43,7 +62,7 @@ const QueryForm = () => {
       position: 0,
       length: 10,
     };
-    // console.log(newParams);
+    // postings.controller.abort();
     dispatch(saveParams(newParams));
     dispatch(initializePostingsByParams(newParams));
   };
@@ -55,6 +74,10 @@ const QueryForm = () => {
     company.clear();
     include.clear();
     exclude.clear();
+    dispatch(clearPostings());
+    dispatch(clearParams());
+    // postings.controller.abort();
+    dispatch(setRequests(0));
   };
 
   return (
