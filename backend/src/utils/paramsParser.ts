@@ -1,32 +1,25 @@
 import { Params } from "../types/params";
+import { isNumber, isObject, isString } from "./typeGuards";
 
-const isString = (text: unknown): text is string => {
-  return typeof text === "string" || text instanceof String;
-};
-
-const parseString = (string: unknown): string => {
-  if (!string || !isString(string)) {
-    throw new Error("Incorrect or missing string");
-  }
-  return string.replace(" ", "%20");
+export const parseString = (string: unknown): string => {
+  if (!string) return "";
+  if (!isString(string)) throw new Error("Incorrect string");
+  return string.toLowerCase();
 };
 
 const parseStringArray = (stringArray: unknown): Array<string> => {
-  if (!stringArray || !(stringArray instanceof Array)) {
-    throw new Error("Incorrect or missing string array");
+  if (!stringArray) return [];
+  if (!(stringArray instanceof Array)) {
+    throw new Error("Incorrect string array");
   }
   const outputArray: Array<string> = [];
   for (const stringElement of stringArray) {
     if (!stringElement || !isString(stringElement)) {
       throw new Error("Incorrect or missing string array element");
     }
-    outputArray.push(stringElement);
+    outputArray.push(stringElement.toLowerCase());
   }
   return outputArray;
-};
-
-const isNumber = (text: unknown): text is number => {
-  return typeof text === "number" || text instanceof Number;
 };
 
 const parseNumber = (number: unknown): number => {
@@ -34,10 +27,6 @@ const parseNumber = (number: unknown): number => {
     throw new Error("Incorrect or missing number");
   }
   return number;
-};
-
-const isObject = (object: unknown): object is object => {
-  return typeof object === "object" || object instanceof Object;
 };
 
 const parseParams = (requestObject: unknown): Params => {
@@ -51,6 +40,7 @@ const parseParams = (requestObject: unknown): Params => {
     "distance" in requestObject &&
     "commute" in requestObject &&
     "company" in requestObject &&
+    "seniority" in requestObject &&
     "salary" in requestObject &&
     "jobType" in requestObject &&
     "experienceLevel" in requestObject &&
@@ -63,34 +53,19 @@ const parseParams = (requestObject: unknown): Params => {
   ) {
     const newParamsObject: Params = {
       keyword: parseString(requestObject.keyword),
-      location: requestObject.location
-        ? parseString(requestObject.location)
-        : "",
-      postedTime: requestObject.postedTime
-        ? parseString(requestObject.postedTime)
-        : "",
-      distance: requestObject.distance
-        ? parseString(requestObject.distance)
-        : "",
-      commute: requestObject.commute ? parseString(requestObject.commute) : "",
-      company: requestObject.company ? parseString(requestObject.company) : "",
-      salary: requestObject.salary ? parseString(requestObject.salary) : "",
-      jobType: requestObject.jobType ? parseString(requestObject.jobType) : "",
-      experienceLevel: requestObject.experienceLevel
-        ? parseString(requestObject.experienceLevel)
-        : "",
-      include: requestObject.include
-        ? parseStringArray(requestObject.include)
-        : [],
-      exclude: requestObject.exclude
-        ? parseStringArray(requestObject.exclude)
-        : [],
-      applied: requestObject.applied
-        ? parseStringArray(requestObject.applied)
-        : [],
-      strongInclude: requestObject.strongInclude
-        ? parseStringArray(requestObject.strongInclude)
-        : [],
+      location: parseString(requestObject.location),
+      postedTime: parseString(requestObject.postedTime),
+      distance: parseString(requestObject.distance),
+      commute: parseString(requestObject.commute),
+      company: parseString(requestObject.company),
+      seniority: parseString(requestObject.seniority),
+      salary: parseString(requestObject.salary),
+      jobType: parseString(requestObject.jobType),
+      experienceLevel: parseString(requestObject.experienceLevel),
+      include: parseStringArray(requestObject.include),
+      exclude: parseStringArray(requestObject.exclude),
+      applied: parseStringArray(requestObject.applied),
+      strongInclude: parseStringArray(requestObject.strongInclude),
       position: requestObject.position
         ? parseNumber(requestObject.position)
         : 0,

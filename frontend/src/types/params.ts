@@ -5,6 +5,7 @@ export interface Params {
   distance: string;
   commute: string;
   company: string;
+  seniority: string;
   salary: string;
   jobType: string;
   experienceLevel: string;

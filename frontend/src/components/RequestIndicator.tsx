@@ -18,8 +18,11 @@ const RequestIndicator = () => {
 
   return (
     <>
-      <CircularProgress sx={{ mr: 2 }} /> Scraping... Requests:{" "}
-      {runningRequests}
+      <CircularProgress sx={{ mr: 2 }} /> Scraping...
+      {` (Requests may take
+      several minutes) `}
+      {"     "}
+      Requests: {runningRequests}
     </>
   );
 };

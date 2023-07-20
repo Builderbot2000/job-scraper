@@ -11,7 +11,6 @@ const requestsSlice = createSlice({
       return state.filter((controller) => controller !== action.payload);
     },
     clearAllRequests(state) {
-      console.log("clearing all requests...");
       for (const controller of state) {
         controller.abort();
       }

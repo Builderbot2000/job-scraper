@@ -81,31 +81,42 @@ const queryJob = async (
 };
 
 const queryJobs = async (params: Params): Promise<Array<Posting>> => {
-  const response = await axios.get(
-    `${indexQueryAddress}?keywords=${params.keyword}&location=${params.location}`
-  );
-  const jobsIndexHtml = response.data as string;
-  const $ = cheerio.load(jobsIndexHtml);
-  const jobs = $("li");
-  const jobLinks: Array<string> = [];
-  jobs.each((_index, element) => {
-    const jobLink = $(element).find("a.base-card__full-link").attr("href");
-    if (jobLink) jobLinks.push(jobLink);
-  });
   const postings: Array<Posting> = [];
-  let currentPosition = 0;
-  let currentLength = 0;
-  for (const link of jobLinks) {
-    if (currentLength >= params.length) break;
-    if (currentPosition >= params.position) {
-      const posting = await queryJob(params, link);
-      // console.log(posting);
-      if (posting) {
-        postings.push(posting);
-        currentLength += 1;
-        console.log("SUCCESS");
-      } else console.log("FAIL");
-    } else currentPosition += 1;
+  let startPosition = 0;
+  while (postings.length < params.length) {
+    try {
+      const response = await axios.get(
+        `${indexQueryAddress}?keywords=${params.keyword}&location=${params.location}&start=${startPosition}`
+      );
+      const jobsIndexHtml = response.data as string;
+      const $ = cheerio.load(jobsIndexHtml);
+      const jobs = $("li");
+      const jobLinks: Array<string> = [];
+      jobs.each((_index, element) => {
+        const jobLink = $(element).find("a.base-card__full-link").attr("href");
+        if (jobLink) jobLinks.push(jobLink);
+      });
+      console.log("captured: ", jobLinks.length);
+
+      let currentPosition = 0;
+      let currentLength = 0;
+      for (const link of jobLinks) {
+        if (currentLength >= params.length) break;
+        if (currentPosition >= params.position) {
+          const posting = await queryJob(params, link);
+          // console.log(posting);
+          if (posting) {
+            postings.push(posting);
+            currentLength += 1;
+            console.log("SUCCESS");
+          } else console.log("FAIL");
+        } else currentPosition += 1;
+      }
+      startPosition += 25;
+    } catch (err) {
+      await wait(3000);
+      console.log("RETRY INDEX");
+    }
   }
   return postings;
 };

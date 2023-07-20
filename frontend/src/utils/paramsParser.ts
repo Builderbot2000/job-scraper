@@ -8,8 +8,9 @@ export const parseString = (string: unknown): string => {
 };
 
 const parseStringArray = (stringArray: unknown): Array<string> => {
-  if (!stringArray || !(stringArray instanceof Array)) {
-    throw new Error("Incorrect or missing string array");
+  if (!stringArray) return [];
+  if (!(stringArray instanceof Array)) {
+    throw new Error("Incorrect string array");
   }
   const outputArray: Array<string> = [];
   for (const stringElement of stringArray) {
@@ -39,6 +40,7 @@ const parseParams = (requestObject: unknown): Params => {
     "distance" in requestObject &&
     "commute" in requestObject &&
     "company" in requestObject &&
+    "seniority" in requestObject &&
     "salary" in requestObject &&
     "jobType" in requestObject &&
     "experienceLevel" in requestObject &&
@@ -51,34 +53,19 @@ const parseParams = (requestObject: unknown): Params => {
   ) {
     const newParamsObject: Params = {
       keyword: parseString(requestObject.keyword),
-      location: requestObject.location
-        ? parseString(requestObject.location)
-        : "",
-      postedTime: requestObject.postedTime
-        ? parseString(requestObject.postedTime)
-        : "",
-      distance: requestObject.distance
-        ? parseString(requestObject.distance)
-        : "",
-      commute: requestObject.commute ? parseString(requestObject.commute) : "",
-      company: requestObject.company ? parseString(requestObject.company) : "",
-      salary: requestObject.salary ? parseString(requestObject.salary) : "",
-      jobType: requestObject.jobType ? parseString(requestObject.jobType) : "",
-      experienceLevel: requestObject.experienceLevel
-        ? parseString(requestObject.experienceLevel)
-        : "",
-      include: requestObject.include
-        ? parseStringArray(requestObject.include)
-        : [],
-      exclude: requestObject.exclude
-        ? parseStringArray(requestObject.exclude)
-        : [],
-      applied: requestObject.applied
-        ? parseStringArray(requestObject.applied)
-        : [],
-      strongInclude: requestObject.strongInclude
-        ? parseStringArray(requestObject.strongInclude)
-        : [],
+      location: parseString(requestObject.location),
+      postedTime: parseString(requestObject.postedTime),
+      distance: parseString(requestObject.distance),
+      commute: parseString(requestObject.commute),
+      company: parseString(requestObject.company),
+      seniority: parseString(requestObject.seniority),
+      salary: parseString(requestObject.salary),
+      jobType: parseString(requestObject.jobType),
+      experienceLevel: parseString(requestObject.experienceLevel),
+      include: parseStringArray(requestObject.include),
+      exclude: parseStringArray(requestObject.exclude),
+      applied: parseStringArray(requestObject.applied),
+      strongInclude: parseStringArray(requestObject.strongInclude),
       position: requestObject.position
         ? parseNumber(requestObject.position)
         : 0,

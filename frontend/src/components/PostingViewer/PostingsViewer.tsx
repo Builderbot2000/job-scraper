@@ -20,16 +20,16 @@ import { useAppDispatch } from "../../hooks";
 import { addPostingsByParams } from "../../reducers/postingsReducer";
 import { Params } from "../../types/params";
 import paramsParser from "../../utils/paramsParser";
-import { Height } from "@mui/icons-material";
 
 const PostingsViewer = () => {
-  const [currentPosition, setCurrentPosition] = useState(0);
+  let storedPosition = storage.loadField("currentPosition");
+  if (storedPosition && isNumber(Number(storedPosition)))
+    storedPosition = Number(storedPosition);
+  else storedPosition = 0;
+  console.log("stored position ", storedPosition);
+  const [currentPosition, setCurrentPosition] = useState(storedPosition);
 
   const dispatch = useAppDispatch();
-
-  const storedPosition = storage.loadField("currentPosition");
-  if (storedPosition && isNumber(storedPosition))
-    setCurrentPosition(storedPosition);
 
   const params: Params | null = useSelector((state) => {
     const storedParams = storage.loadParams();
@@ -105,7 +105,7 @@ const PostingsViewer = () => {
         }}
       >
         <Typography
-          variant="h1"
+          variant="h3"
           sx={{
             display: { xs: "none", md: "flex" },
             fontFamily: "monospace",

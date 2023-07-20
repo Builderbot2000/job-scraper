@@ -3,12 +3,19 @@ import { Posting } from "../types/posting";
 
 export const postingFilter = (params: Params, posting: Posting): boolean => {
   if (!params || !posting) return false;
-  if (params.applied.includes(posting.company)) return false;
-  for (const includedString of params.include) {
-    if (!posting.description.includes(includedString)) return false;
-  }
+  let pass = true;
+  if (
+    params.seniority !== "" &&
+    posting.seniority !== "Not Applicable" &&
+    posting.seniority !== params.seniority
+  )
+    pass = false;
+  if (params.applied.includes(posting.company)) pass = false;
   for (const excludedString of params.exclude) {
-    if (posting.description.includes(excludedString)) return false;
+    if (posting.description.includes(excludedString)) pass = false;
   }
-  return true;
+  for (const includedString of params.include) {
+    if (posting.description.includes(includedString)) pass = true;
+  }
+  return pass;
 };

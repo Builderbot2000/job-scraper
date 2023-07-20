@@ -24,6 +24,7 @@ const QueryForm = () => {
   const keyword = usePersistentField("keyword");
   const location = usePersistentField("location");
   const company = usePersistentField("company");
+  const seniority = usePersistentField("seniority");
   const include = usePersistentField("include");
   const exclude = usePersistentField("exclude");
 
@@ -43,6 +44,7 @@ const QueryForm = () => {
       distance: "",
       commute: "",
       company: company.value,
+      seniority: seniority.value,
       salary: "",
       jobType: "",
       experienceLevel: "",
@@ -62,6 +64,7 @@ const QueryForm = () => {
     keyword.clear();
     location.clear();
     company.clear();
+    seniority.clear();
     include.clear();
     exclude.clear();
     dispatch(clearAllRequests());
@@ -123,8 +126,12 @@ const QueryForm = () => {
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
-            <InputLabel>must include</InputLabel>
-            <Input id="must-include-input" disabled />
+            <InputLabel>seniority</InputLabel>
+            <Input
+              id="seniority-input"
+              value={seniority.value}
+              onChange={seniority.onChange}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
