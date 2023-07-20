@@ -7,13 +7,15 @@ import postingsParser from "../utils/postingsParser";
 
 const baseUrl = SERVICE_URL + "/api/linkedinJobs";
 
-const controller = new AbortController();
-
-const getPostingsByParams = async (params: Params): Promise<Array<Posting>> => {
+const getPostingsByParams = async (
+  params: Params,
+  controller: AbortController
+): Promise<Array<Posting>> => {
+  console.log("current signal: ", controller.signal);
   const request = await axios.post(baseUrl, params, {
     signal: controller.signal,
   });
   return postingsParser.parsePostings(request.data);
 };
 
-export default { getPostingsByParams, controller };
+export default { getPostingsByParams };

@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -18,9 +17,8 @@ import {
   clearPostings,
   initializePostingsByParams,
 } from "../reducers/postingsReducer";
-import { setRequests } from "../reducers/requestsReducer";
-import { isObject, isNumber } from "../utils/typeGuards";
-import postings from "../services/postings";
+import storage from "../services/storage";
+import { clearAllRequests } from "../reducers/requestsReducer";
 
 const QueryForm = () => {
   const keyword = usePersistentField("keyword");
@@ -31,20 +29,13 @@ const QueryForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const runningRequests: number = useSelector((state) => {
-    if (
-      state &&
-      isObject(state) &&
-      "requests" in state &&
-      state.requests &&
-      isNumber(state.requests)
-    ) {
-      return state.requests;
-    } else return 0;
-  });
-
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
+    dispatch(clearAllRequests());
+    dispatch(clearParams());
+    dispatch(clearPostings());
+    storage.removeField("currentPosition");
+    if (keyword.value === "") return;
     const newParams: Params = {
       keyword: keyword.value,
       location: location.value,
@@ -62,7 +53,6 @@ const QueryForm = () => {
       position: 0,
       length: 10,
     };
-    // postings.controller.abort();
     dispatch(saveParams(newParams));
     dispatch(initializePostingsByParams(newParams));
   };
@@ -74,10 +64,10 @@ const QueryForm = () => {
     company.clear();
     include.clear();
     exclude.clear();
+    dispatch(clearAllRequests());
     dispatch(clearPostings());
     dispatch(clearParams());
-    // postings.controller.abort();
-    dispatch(setRequests(0));
+    storage.removeField("currentPosition");
   };
 
   return (
@@ -104,25 +94,37 @@ const QueryForm = () => {
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>search term</InputLabel>
-            <Input value={keyword.value} onChange={keyword.onChange} />
+            <Input
+              id="search-term-input"
+              value={keyword.value}
+              onChange={keyword.onChange}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>location</InputLabel>
-            <Input value={location.value} onChange={location.onChange} />
+            <Input
+              id="location-input"
+              value={location.value}
+              onChange={location.onChange}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>company</InputLabel>
-            <Input value={company.value} onChange={company.onChange} />
+            <Input
+              id="company-input"
+              value={company.value}
+              onChange={company.onChange}
+            />
           </FormControl>
         </Grid>
         <Grid item xs={6}>
           <FormControl sx={{ m: 1 }}>
             <InputLabel>must include</InputLabel>
-            <Input disabled />
+            <Input id="must-include-input" disabled />
           </FormControl>
         </Grid>
         <Grid item xs={6}>

@@ -10,11 +10,7 @@ import { Posting } from "../types/posting";
 import { RootState } from "../store";
 import { Params } from "../types/params";
 import paramsParser from "../utils/paramsParser";
-import {
-  decrementRequests,
-  incrementRequests,
-  setRequests,
-} from "./requestsReducer";
+import { addRequest, removeRequest } from "./requestsReducer";
 
 const postingsSlice = createSlice({
   name: "postings",
@@ -44,16 +40,17 @@ export const initializePostingsFromLocalStorage =
 export const initializePostingsByParams =
   (params: Params): ThunkAction<void, RootState, unknown, Action<unknown>> =>
   async (dispatch) => {
-    dispatch(setRequests(0));
-    dispatch(incrementRequests());
+    const controller = new AbortController();
+    dispatch(addRequest(controller));
     const newPostings = await postings.getPostingsByParams(
-      paramsParser.parseParams(params)
+      paramsParser.parseParams(params),
+      controller
     );
     dispatch(removePostings());
     dispatch(setPostings(newPostings));
     storage.removePostings();
     storage.savePostings(newPostings);
-    dispatch(decrementRequests());
+    dispatch(removeRequest(controller));
   };
 
 export const addPostingsByParams =
@@ -62,14 +59,16 @@ export const addPostingsByParams =
     state: Array<Posting>
   ): ThunkAction<void, RootState, unknown, Action<unknown>> =>
   async (dispatch) => {
-    dispatch(incrementRequests());
+    const controller = new AbortController();
+    dispatch(addRequest(controller));
     const newPostings = await postings.getPostingsByParams(
-      paramsParser.parseParams(params)
+      paramsParser.parseParams(params),
+      controller
     );
     dispatch(appendPostings(newPostings));
     storage.removePostings();
     storage.savePostings(state.concat(newPostings));
-    dispatch(decrementRequests());
+    dispatch(removeRequest(controller));
   };
 
 export const clearPostings =

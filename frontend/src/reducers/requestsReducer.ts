@@ -2,21 +2,25 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const requestsSlice = createSlice({
   name: "requests",
-  initialState: 0 as number,
+  initialState: [] as Array<AbortController>,
   reducers: {
-    setRequests(_state, action: PayloadAction<number>) {
-      return action.payload;
+    addRequest(state, action: PayloadAction<AbortController>) {
+      state.push(action.payload);
     },
-    incrementRequests(state) {
-      return (state += 1);
+    removeRequest(state, action: PayloadAction<AbortController>) {
+      return state.filter((controller) => controller !== action.payload);
     },
-    decrementRequests(state) {
-      return (state -= 1);
+    clearAllRequests(state) {
+      console.log("clearing all requests...");
+      for (const controller of state) {
+        controller.abort();
+      }
+      return [];
     },
   },
 });
 
-export const { setRequests, incrementRequests, decrementRequests } =
+export const { addRequest, removeRequest, clearAllRequests } =
   requestsSlice.actions;
 
 export default requestsSlice.reducer;

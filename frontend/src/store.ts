@@ -10,6 +10,22 @@ const store = configureStore({
     params: paramsReducer,
     requests: requestsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          "requests/addRequest",
+          "requests/removeRequest",
+          "requests/clearAllRequests",
+        ],
+        ignoredPaths: [
+          "requests.0",
+          "requests.addRequest",
+          "requests.removeRequest",
+          "requests.clearAllRequests",
+        ],
+      },
+    }),
 });
 
 export default store;

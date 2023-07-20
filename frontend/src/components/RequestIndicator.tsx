@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { isNumber, isObject } from "../utils/typeGuards";
+import { isObject } from "../utils/typeGuards";
 import { CircularProgress } from "@mui/material";
 
 const RequestIndicator = () => {
@@ -8,10 +8,9 @@ const RequestIndicator = () => {
       state &&
       isObject(state) &&
       "requests" in state &&
-      state.requests &&
-      isNumber(state.requests)
+      Array.isArray(state.requests)
     ) {
-      return state.requests;
+      return state.requests.length;
     } else return 0;
   });
 

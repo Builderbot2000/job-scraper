@@ -12,7 +12,15 @@ const App = () => {
   dispatch(initializePostingsFromLocalStorage());
 
   return (
-    <Grid container sx={{ width: "100vw", height: "100vh" }}>
+    <Grid
+      container
+      sx={{
+        width: "100vw",
+        height: "100vh",
+        maxWidth: 1,
+        maxHeight: 1,
+      }}
+    >
       <Grid item xs={12} sx={{ height: 0.15 }}>
         <ResponsiveAppBar />
       </Grid>

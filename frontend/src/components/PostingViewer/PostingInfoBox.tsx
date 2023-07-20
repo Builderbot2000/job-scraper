@@ -19,7 +19,6 @@ const PostingInfoBox = ({
           <Typography
             justifyContent="center"
             alignContent="center"
-            variant="h6"
             sx={{
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",

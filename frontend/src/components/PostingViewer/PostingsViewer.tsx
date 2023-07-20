@@ -20,6 +20,7 @@ import { useAppDispatch } from "../../hooks";
 import { addPostingsByParams } from "../../reducers/postingsReducer";
 import { Params } from "../../types/params";
 import paramsParser from "../../utils/paramsParser";
+import { Height } from "@mui/icons-material";
 
 const PostingsViewer = () => {
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -49,10 +50,9 @@ const PostingsViewer = () => {
       state &&
       isObject(state) &&
       "requests" in state &&
-      state.requests &&
-      isNumber(state.requests)
+      Array.isArray(state.requests)
     ) {
-      return state.requests;
+      return state.requests.length;
     } else return 0;
   });
 
@@ -125,7 +125,6 @@ const PostingsViewer = () => {
     <>
       <Card
         sx={{
-          border: 0,
           borderRadius: 3,
           height: 1,
           width: 0.8,
@@ -136,15 +135,18 @@ const PostingsViewer = () => {
           <Grid
             container
             spacing={1}
-            direction="column"
-            justifyContent="center"
-            alignContent="center"
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            <Grid item xs={12} sx={{ mt: 3, mb: 2 }}>
+            <Grid item sx={{ mt: 3, mb: 2, ml: 3, height: 60 }}>
               <Typography
                 justifyContent="center"
                 alignContent="center"
-                variant="h5"
+                variant="h6"
                 sx={{
                   display: { xs: "none", md: "flex" },
                   fontFamily: "monospace",
@@ -152,83 +154,99 @@ const PostingsViewer = () => {
                   letterSpacing: ".3rem",
                   color: "inherit",
                   textDecoration: "none",
+                  wordWrap: "break-word",
                 }}
               >
                 {posting.title}
               </Typography>
             </Grid>
-            <Grid item xs={12} sx={{ width: 0.8 }}>
-              <Grid
-                container
-                alignContent="center"
-                justifyContent="space-evenly"
-              >
-                {" "}
-                <Grid item xs={6}>
-                  <PostingInfoBox title="Company" content={posting.company} />
+            <Grid item sx={{ width: 1, height: 220 }}>
+              <Grid container>
+                <Grid item xs={12} sx={{ width: 0.8 }}>
+                  <Grid
+                    container
+                    alignContent="center"
+                    justifyContent="space-evenly"
+                  >
+                    {" "}
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Company"
+                        content={posting.company}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Seniority"
+                        content={posting.seniority}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <PostingInfoBox
-                    title="Seniority"
-                    content={posting.seniority}
-                  />
+                <Grid item xs={12} sx={{ width: 0.8 }}>
+                  <Grid
+                    container
+                    alignContent="center"
+                    justifyContent="space-evenly"
+                  >
+                    {" "}
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Location"
+                        content={posting.location}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Industries"
+                        content={posting.industries}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12} sx={{ width: 0.8 }}>
-              <Grid
-                container
-                alignContent="center"
-                justifyContent="space-evenly"
-              >
-                {" "}
-                <Grid item xs={6}>
-                  <PostingInfoBox title="Location" content={posting.location} />
+                <Grid item xs={12} sx={{ width: 0.8 }}>
+                  <Grid
+                    container
+                    alignContent="center"
+                    justifyContent="space-evenly"
+                  >
+                    {" "}
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Competition"
+                        content={posting.competition}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Job Type"
+                        content={posting.jobType}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <PostingInfoBox
-                    title="Industries"
-                    content={posting.industries}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12} sx={{ width: 0.8 }}>
-              <Grid
-                container
-                alignContent="center"
-                justifyContent="space-evenly"
-              >
-                {" "}
-                <Grid item xs={6}>
-                  <PostingInfoBox
-                    title="Competition"
-                    content={posting.competition}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <PostingInfoBox title="Job Type" content={posting.jobType} />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12} sx={{ width: 0.8 }}>
-              <Grid
-                container
-                alignContent="center"
-                justifyContent="space-evenly"
-              >
-                {" "}
-                <Grid item xs={6}>
-                  <PostingInfoBox title="Posted" content={posting.postedTime} />
-                </Grid>
-                <Grid item xs={6}>
-                  <PostingInfoBox title="Commute" content={null} />
+                <Grid item xs={12} sx={{ width: 0.8 }}>
+                  <Grid
+                    container
+                    alignContent="center"
+                    justifyContent="space-evenly"
+                  >
+                    {" "}
+                    <Grid item xs={6}>
+                      <PostingInfoBox
+                        title="Posted"
+                        content={posting.postedTime}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <PostingInfoBox title="Commute" content={null} />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
             <Grid
               item
-              xs={12}
               sx={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -248,18 +266,26 @@ const PostingsViewer = () => {
             </Grid>
             <Grid
               item
-              xs={12}
               alignContent="center"
               justifyContent="space-evenly"
+              sx={{ width: 500, height: 50 }}
             >
               <Grid
                 container
-                spacing={3}
+                spacing={1}
                 alignContent="center"
                 justifyContent="space-evenly"
-                sx={{ border: 3 }}
               >
-                <Grid item xs={4} sx={{ border: 3 }}>
+                <Grid
+                  item
+                  xs={4}
+                  sx={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <Button variant="text" onClick={handlePrev}>
                     <KeyboardArrowLeftIcon />
                   </Button>
@@ -281,7 +307,16 @@ const PostingsViewer = () => {
                     {currentPosition + 1} / {total}
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid
+                  item
+                  xs={4}
+                  sx={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <Button variant="text" onClick={handleNext}>
                     <KeyboardArrowRightIcon />
                   </Button>
