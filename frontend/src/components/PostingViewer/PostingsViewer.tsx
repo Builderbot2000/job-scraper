@@ -26,7 +26,6 @@ const PostingsViewer = () => {
   if (storedPosition && isNumber(Number(storedPosition)))
     storedPosition = Number(storedPosition);
   else storedPosition = 0;
-  console.log("stored position ", storedPosition);
   const [currentPosition, setCurrentPosition] = useState(storedPosition);
 
   const dispatch = useAppDispatch();
@@ -260,6 +259,7 @@ const PostingsViewer = () => {
                 sx={{ mt: 3, width: 150, height: 50 }}
                 size="large"
                 href={posting.link}
+                target="_blank"
               >
                 Apply
               </Button>

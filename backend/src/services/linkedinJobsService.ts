@@ -81,7 +81,9 @@ const queryJob = async (
 };
 
 const queryJobs = async (params: Params): Promise<Array<Posting>> => {
+  console.log("START");
   const postings: Array<Posting> = [];
+  let currentPosition = 0;
   let startPosition = 0;
   while (postings.length < params.length) {
     try {
@@ -96,18 +98,16 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
         const jobLink = $(element).find("a.base-card__full-link").attr("href");
         if (jobLink) jobLinks.push(jobLink);
       });
+      console.log("startPosition: ", startPosition);
+      console.log("matches: ", postings.length);
       console.log("captured: ", jobLinks.length);
-
-      let currentPosition = 0;
-      let currentLength = 0;
       for (const link of jobLinks) {
-        if (currentLength >= params.length) break;
+        if (postings.length >= params.length) break;
         if (currentPosition >= params.position) {
           const posting = await queryJob(params, link);
           // console.log(posting);
           if (posting) {
             postings.push(posting);
-            currentLength += 1;
             console.log("SUCCESS");
           } else console.log("FAIL");
         } else currentPosition += 1;
@@ -118,6 +118,7 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
       console.log("RETRY INDEX");
     }
   }
+  console.log("END");
   return postings;
 };
 
