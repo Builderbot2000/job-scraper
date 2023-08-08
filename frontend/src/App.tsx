@@ -14,35 +14,39 @@ const App = () => {
   return (
     <Grid
       container
+      direction="column"
       sx={{
-        width: "100vw",
-        height: "100vh",
-        maxWidth: 1,
-        maxHeight: 1,
+        width: 1,
+        border: 0,
       }}
     >
-      <Grid item xs={12} sx={{ height: 0.15 }}>
+      <Grid item xs={12} sx={{ border: 0 }}>
         <ResponsiveAppBar />
       </Grid>
-      <Grid item xs={12}>
-        <Grid container sx={{ height: 0.8, p: 4 }}>
-          <Grid item xs={6}>
-            <QueryForm />
-            <Box sx={{ mt: 4 }}>
-              <RequestIndicator />
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <PostingsViewer />
-          </Grid>
+      <Grid
+        item
+        container
+        xs={12}
+        sx={{
+          flexDirection: { xs: "column", md: "row" },
+          p: 4,
+          border: 0,
+        }}
+      >
+        <Grid item md={6} sx={{ border: 0 }}>
+          <QueryForm />
+          <Box sx={{ mt: 4 }}>
+            <RequestIndicator />
+          </Box>
+        </Grid>
+        <Grid item md={6} sx={{ border: 0 }}>
+          <PostingsViewer />
         </Grid>
       </Grid>
-      <Grid container sx={{ height: 0.05 }} justifyContent="center">
+      <Grid item container justifyContent="center">
         <Typography
           sx={{
-            ml: 3,
-            mr: 2,
-            display: { xs: "none", md: "flex" },
+            display: "flex",
             fontFamily: "monospace",
             fontWeight: 700,
             letterSpacing: ".3rem",

@@ -74,7 +74,7 @@ const QueryForm = () => {
   };
 
   return (
-    <>
+    <Box sx={{ width: 1, border: 0 }}>
       <FormLabel>
         <Typography
           variant="h4"
@@ -93,72 +93,83 @@ const QueryForm = () => {
           SEARCH FOR JOBS
         </Typography>
       </FormLabel>
-      <Grid container sx={{ mt: 3 }}>
-        <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>search term</InputLabel>
-            <Input
-              id="search-term-input"
-              value={keyword.value}
-              onChange={keyword.onChange}
+      <Grid container direction="column" sx={{ mt: 3 }}>
+        <Grid item container direction="row">
+          <Grid item xs={6}>
+            <FormControl sx={{ m: 1 }}>
+              <InputLabel>search term</InputLabel>
+              <Input
+                id="search-term-input"
+                value={keyword.value}
+                onChange={keyword.onChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl sx={{ m: 1 }}>
+              <InputLabel>location</InputLabel>
+              <Input
+                id="location-input"
+                value={location.value}
+                onChange={location.onChange}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid item container direction="row">
+          <Grid item xs={6}>
+            <FormControl sx={{ m: 1 }}>
+              <InputLabel>company</InputLabel>
+              <Input
+                id="company-input"
+                value={company.value}
+                onChange={company.onChange}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} sx={{ border: 0 }}>
+            <FormControl sx={{ m: 1 }}>
+              <InputLabel>seniority</InputLabel>
+              <Input
+                id="seniority-input"
+                value={seniority.value}
+                onChange={seniority.onChange}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid item container direction="row" sx={{ border: 0 }}>
+          <Grid item xs={6} sx={{ border: 0 }}>
+            <TextField
+              id="include-input"
+              label="include"
+              variant="outlined"
+              multiline
+              minRows={4}
+              sx={{ mt: 3, mx: 1, border: 0 }}
+              value={include.value}
+              onChange={include.onChange}
             />
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>location</InputLabel>
-            <Input
-              id="location-input"
-              value={location.value}
-              onChange={location.onChange}
+          </Grid>
+          <Grid item xs={6} sx={{ border: 0 }}>
+            <TextField
+              id="exclude-input"
+              label="exclude"
+              variant="outlined"
+              multiline
+              minRows={4}
+              sx={{ mt: 3, mx: 1, border: 0 }}
+              value={exclude.value}
+              onChange={exclude.onChange}
             />
-          </FormControl>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>company</InputLabel>
-            <Input
-              id="company-input"
-              value={company.value}
-              onChange={company.onChange}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel>seniority</InputLabel>
-            <Input
-              id="seniority-input"
-              value={seniority.value}
-              onChange={seniority.onChange}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="include-input"
-            label="include"
-            variant="outlined"
-            multiline
-            minRows={4}
-            sx={{ mt: 3 }}
-            value={include.value}
-            onChange={include.onChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="exclude-input"
-            label="exclude"
-            variant="outlined"
-            multiline
-            minRows={4}
-            sx={{ mt: 3 }}
-            value={exclude.value}
-            onChange={exclude.onChange}
-          />
-        </Grid>
-        <Grid container>
+        <Grid
+          item
+          container
+          spacing={2}
+          sx={{ justifyContent: { xs: "space-evenly", md: "flex-start" } }}
+        >
           <Grid item xs={3}>
             <Box display="flex" justifyContent="left" alignItems="center">
               <Button
@@ -187,7 +198,7 @@ const QueryForm = () => {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 };
 

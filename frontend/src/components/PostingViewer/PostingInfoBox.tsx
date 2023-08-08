@@ -20,7 +20,7 @@ const PostingInfoBox = ({
             justifyContent="center"
             alignContent="center"
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: "flex",
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",

@@ -1,0 +1,9 @@
+        <Grid item md={6} sx={{ border: 0 }}>
+          <QueryForm />
+          <Box sx={{ mt: 4 }}>
+            <RequestIndicator />
+          </Box>
+        </Grid>
+        <Grid item md={6} sx={{ border: 0 }}>
+          <PostingsViewer />
+        </Grid>
