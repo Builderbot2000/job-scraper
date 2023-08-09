@@ -124,6 +124,8 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
       console.log("RETRY INDEX");
     }
   }
+  task.request = null;
+  task.abort = false;
   console.log("END");
   return postings;
 };
