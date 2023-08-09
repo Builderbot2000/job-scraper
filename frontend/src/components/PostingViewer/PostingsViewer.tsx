@@ -20,16 +20,9 @@ import { useAppDispatch } from "../../hooks";
 import { addPostingsByParams } from "../../reducers/postingsReducer";
 import { Params } from "../../types/params";
 import paramsParser from "../../utils/paramsParser";
+import { setPosition } from "../../reducers/positionReducer";
 
 const PostingsViewer = () => {
-  let storedPosition = storage.loadField("currentPosition");
-  if (storedPosition && isNumber(Number(storedPosition)))
-    storedPosition = Number(storedPosition);
-  else storedPosition = 0;
-  const [currentPosition, setCurrentPosition] = useState<number>(
-    storedPosition as number
-  );
-
   const dispatch = useAppDispatch();
 
   const params: Params | null = useSelector((state) => {
@@ -57,6 +50,17 @@ const PostingsViewer = () => {
     } else return 0;
   });
 
+  const currentPosition: number = useSelector((state) => {
+    if (
+      state &&
+      isObject(state) &&
+      "position" in state &&
+      isNumber(state.position)
+    ) {
+      return state.position;
+    } else return 0;
+  });
+
   const posting: Posting = postings[currentPosition];
   const total: number = postings.length;
 
@@ -67,7 +71,7 @@ const PostingsViewer = () => {
       params &&
       runningRequests == 0
     ) {
-      console.log("Adding new postings...");
+      // console.log("Adding new postings...");
       dispatch(addPostingsByParams(params, postings));
     }
   }, [dispatch, currentPosition, params, postings, runningRequests, total]);
@@ -76,7 +80,7 @@ const PostingsViewer = () => {
     event.preventDefault();
     const newPosition = currentPosition - 1;
     if (newPosition >= 0) {
-      setCurrentPosition(newPosition);
+      dispatch(setPosition(newPosition));
       storage.saveField("currentPosition", newPosition);
     }
   };
@@ -85,7 +89,7 @@ const PostingsViewer = () => {
     event.preventDefault();
     const newPosition = currentPosition + 1;
     if (newPosition < total) {
-      setCurrentPosition(newPosition);
+      dispatch(setPosition(newPosition));
       storage.saveField("currentPosition", newPosition);
     }
   };

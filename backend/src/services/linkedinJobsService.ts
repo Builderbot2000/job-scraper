@@ -6,6 +6,7 @@ import { Posting } from "../types/posting";
 import { indexQueryAddress } from "../utils/linkedinApi";
 import cheerio from "cheerio";
 import { postingFilter } from "../utils/postingFilter";
+import { task } from "../app";
 
 const wait = async (duration: number) => {
   await setTimeout(duration);
@@ -81,7 +82,7 @@ const queryJob = async (
 };
 
 const queryJobs = async (params: Params): Promise<Array<Posting>> => {
-  console.log("START");
+  console.log("START SEARCH: ", params.keyword);
   const postings: Array<Posting> = [];
   let currentPosition = 0;
   let startPosition = 0;
@@ -102,6 +103,11 @@ const queryJobs = async (params: Params): Promise<Array<Posting>> => {
       console.log("matches: ", postings.length);
       console.log("captured: ", jobLinks.length);
       for (const link of jobLinks) {
+        if (task.abort) {
+          task.abort = false;
+          console.log("ABORTED");
+          return [];
+        }
         if (postings.length >= params.length) break;
         if (currentPosition >= params.position) {
           const posting = await queryJob(params, link);

@@ -17,8 +17,10 @@ import {
   clearPostings,
   initializePostingsByParams,
 } from "../reducers/postingsReducer";
+import postings from "../services/postings";
 import storage from "../services/storage";
 import { clearAllRequests } from "../reducers/requestsReducer";
+import { setPosition } from "../reducers/positionReducer";
 
 const QueryForm = () => {
   const keyword = usePersistentField("keyword");
@@ -30,12 +32,13 @@ const QueryForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     dispatch(clearAllRequests());
     dispatch(clearParams());
     dispatch(clearPostings());
-    storage.removeField("currentPosition");
+    dispatch(setPosition(0));
+    await postings.abortAllPostingsRequest();
     if (keyword.value === "") return;
     const newParams: Params = {
       keyword: keyword.value,
@@ -59,7 +62,7 @@ const QueryForm = () => {
     dispatch(initializePostingsByParams(newParams));
   };
 
-  const handleClear = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClear = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     keyword.clear();
     location.clear();
@@ -70,7 +73,8 @@ const QueryForm = () => {
     dispatch(clearAllRequests());
     dispatch(clearPostings());
     dispatch(clearParams());
-    storage.removeField("currentPosition");
+    dispatch(setPosition(0));
+    await postings.abortAllPostingsRequest();
   };
 
   return (
@@ -177,6 +181,7 @@ const QueryForm = () => {
                 color="primary"
                 sx={{ mt: 7, width: 150, height: 50 }}
                 size="large"
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={handleSubmit}
               >
                 Search
@@ -190,6 +195,7 @@ const QueryForm = () => {
                 color="primary"
                 sx={{ mt: 7, width: 150, height: 50 }}
                 size="large"
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={handleClear}
               >
                 Clear

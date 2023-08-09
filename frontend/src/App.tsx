@@ -6,10 +6,12 @@ import PostingsViewer from "./components/PostingViewer/PostingsViewer";
 import { initializePostingsFromLocalStorage } from "./reducers/postingsReducer";
 import { useAppDispatch } from "./hooks";
 import RequestIndicator from "./components/RequestIndicator";
+import { initializePositionFromLocalStorage } from "./reducers/positionReducer";
 
 const App = () => {
   const dispatch = useAppDispatch();
   dispatch(initializePostingsFromLocalStorage());
+  dispatch(initializePositionFromLocalStorage());
 
   return (
     <Grid

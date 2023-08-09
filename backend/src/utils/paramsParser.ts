@@ -33,6 +33,7 @@ const parseParams = (requestObject: unknown): Params => {
   if (!isObject(requestObject)) {
     throw new Error("Incorrect or missing object");
   }
+  // console.log(requestObject);
   if (
     "keyword" in requestObject &&
     "location" in requestObject &&
