@@ -8,6 +8,7 @@
     "tsinit": "tsc --init",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
+    "build": "tsc --build",
     "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
