@@ -18,7 +18,6 @@ import {
   initializePostingsByParams,
 } from "../reducers/postingsReducer";
 import postings from "../services/postings";
-import storage from "../services/storage";
 import { clearAllRequests } from "../reducers/requestsReducer";
 import { setPosition } from "../reducers/positionReducer";
 
